@@ -1,18 +1,32 @@
 const cartBtn = document.querySelector(".cart-btn");
-const cart = document.querySelector(".cart");
+const cartModal = document.querySelector(".cart");
 const backDrop = document.querySelector(".backdrop");
 const closeModal = document.querySelector(".cart-item-confirm");
 
+const cartItems = document.querySelector(".cart-items");
+const cartTotal = document.querySelector(".cart-total");
+const cartContent = document.querySelector(".cart-content");
+const productsDOM = document.querySelector(".products-center");
+
+// let cart = [];
+
+// get products
+class Products {}
+
+// dispaly products :
+
+
+
 function showModalFunction() {
   backDrop.style.display = "block";
-  cart.style.opacity = "1";
-  cart.style.top = "20%";
+  cartModal.style.opacity = "1";
+  cartModal.style.top = "20%";
 }
 
 function closeModalFunction() {
   backDrop.style.display = "none";
-  cart.style.opacity = "0";
-  cart.style.top = "-100%";
+  cartModal.style.opacity = "0";
+  cartModal.style.top = "-100%";
 }
 
 cartBtn.addEventListener("click", showModalFunction);
