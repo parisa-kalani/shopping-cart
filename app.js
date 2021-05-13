@@ -59,7 +59,6 @@ class UI {
         // 3. save cart in local sotrage
         Storage.saveCart(cart);
         // 4. set cart values
-        console.log(cart);
         this.setCartValue(cart);
         // 5. dispaly cart item
         this.addCartItem(addedProduct);
@@ -92,6 +91,19 @@ class UI {
  </div>`;
     cartContent.appendChild(div);
   }
+
+  setupApp() {
+    cart = Storage.getCart();
+    this.setCartValue(cart);
+    this.populateCart(cart);
+  }
+
+  populateCart(cart) {
+    cart.forEach((item) => this.addCartItem(item));
+  }
+  cartLogic(){
+    
+  }
 }
 
 // storage :
@@ -107,15 +119,23 @@ class Storage {
   static saveCart(cart) {
     localStorage.setItem("cart", JSON.stringify(cart));
   }
+  static getCart() {
+    return localStorage.getItem("cart")
+      ? JSON.parse(localStorage.getItem("cart"))
+      : [];
+  }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
   const ui = new UI(0);
+  // set up already added cart items
+  ui.setupApp();
   const products = new Products();
   //   get all products :
   const productsData = products.getProducts();
   ui.displayProducts(productsData);
   ui.getCartBtns();
+  ui.cartLogic()
   Storage.saveProducts(productsData);
 });
 
