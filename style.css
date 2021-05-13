@@ -53,7 +53,7 @@ body {
   color: var(--mainBlack);
   font-weight: 800;
 }
-.add-to-cart {
+.cart-btn {
   position: relative;
   cursor: pointer;
 }
@@ -176,12 +176,15 @@ body {
 .cart-title {
   text-align: center;
 }
-
+.cart-content {
+  padding: 1rem;
+}
 .cart-item {
   width: 100%;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
+  margin-bottom: 15px;
 }
 
 .cart-item-img {

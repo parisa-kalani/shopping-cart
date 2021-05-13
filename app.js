@@ -28,7 +28,7 @@ class UI {
         <img src=${product.imageUrl} class="product-img" />
       </div>
       <div class="product-desc">
-        <p class="product-price">${product.price}/p>
+        <p class="product-price">${product.price}</p>
         <p class="product-title">$ ${product.title}</p>
       </div>
       <button class="btn add-to-cart" data-id=${product.id}>
@@ -49,17 +49,48 @@ class UI {
         btn.disabled = true;
       }
       btn.addEventListener("click", (event) => {
-        console.log(event.target);
         event.target.innerText = "In Cart";
         event.target.disabled = "true";
         // 1. get product from products
+        const addedProduct = { ...Storage.getProduct(id), quantity: 1 };
+
         // 2. add product to cart
+        cart = [...cart, addedProduct];
         // 3. save cart in local sotrage
+        Storage.saveCart(cart);
         // 4. set cart values
+        console.log(cart);
+        this.setCartValue(cart);
         // 5. dispaly cart item
+        this.addCartItem(addedProduct);
         // 6. show the cart
       });
     });
+  }
+
+  setCartValue(cart) {
+    let tempCartItems = 0;
+    const totalPrice = cart.reduce((acc, curr) => {
+      tempCartItems += curr.quantity;
+      return curr.quantity * curr.price + acc;
+    }, 0);
+    cartTotal.innerText = parseFloat(totalPrice).toFixed(2);
+    cartItems.innerText = tempCartItems;
+  }
+  addCartItem(cart) {
+    const div = document.createElement("div");
+    div.classList.add("cart-item");
+    div.innerHTML = `<div><img class="cart-item-img" src=${cart.imageUrl} /></div>
+ <div class="cart-item-desc">
+   <h4>${cart.title}</h4>
+   <h5>$ ${cart.price}</h5>
+ </div>
+ <div class="cart-item-conteoller">
+   <i class="fas fa-chevron-up" data-id=${cart.id}></i>
+   <p>${cart.quantity}</p>
+   <i class="fas fa-chevron-down" data-id=${cart.id}></i>
+ </div>`;
+    cartContent.appendChild(div);
   }
 }
 
@@ -67,6 +98,14 @@ class UI {
 class Storage {
   static saveProducts(products) {
     localStorage.setItem("products", JSON.stringify(products));
+  }
+
+  static getProduct(id) {
+    const _products = JSON.parse(localStorage.getItem("products"));
+    return _products.find((p) => p.id == id);
+  }
+  static saveCart(cart) {
+    localStorage.setItem("cart", JSON.stringify(cart));
   }
 }
 
