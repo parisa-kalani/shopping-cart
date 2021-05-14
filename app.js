@@ -8,9 +8,11 @@ const cartItems = document.querySelector(".cart-items");
 const cartTotal = document.querySelector(".cart-total");
 const cartContent = document.querySelector(".cart-content");
 const productsDOM = document.querySelector(".products-center");
+const clearCartBtn = document.querySelector(".clear-cart");
 
 let cart = [];
 
+let buttonsDOM = [];
 // get products
 class Products {
   getProducts() {
@@ -41,6 +43,7 @@ class UI {
   }
   getCartBtns() {
     const addToCartBtns = [...document.querySelectorAll(".add-to-cart")];
+    buttonsDOM = addToCartBtns;
     addToCartBtns.forEach((btn) => {
       const id = btn.dataset.id;
       const isInCart = cart.find((item) => item.id === id);
@@ -50,7 +53,7 @@ class UI {
       }
       btn.addEventListener("click", (event) => {
         event.target.innerText = "In Cart";
-        event.target.disabled = "true";
+        event.target.disabled = true;
         // 1. get product from products
         const addedProduct = { ...Storage.getProduct(id), quantity: 1 };
 
@@ -73,7 +76,9 @@ class UI {
       tempCartItems += curr.quantity;
       return curr.quantity * curr.price + acc;
     }, 0);
-    cartTotal.innerText = parseFloat(totalPrice).toFixed(2);
+    cartTotal.innerText = `total price : ${parseFloat(totalPrice).toFixed(
+      2
+    )} $`;
     cartItems.innerText = tempCartItems;
   }
   addCartItem(cart) {
@@ -88,7 +93,9 @@ class UI {
    <i class="fas fa-chevron-up" data-id=${cart.id}></i>
    <p>${cart.quantity}</p>
    <i class="fas fa-chevron-down" data-id=${cart.id}></i>
- </div>`;
+ </div>
+ <i class="fas fa-trash remove-item" data-id=${cart.id}></i>
+ `;
     cartContent.appendChild(div);
   }
 
@@ -101,8 +108,40 @@ class UI {
   populateCart(cart) {
     cart.forEach((item) => this.addCartItem(item));
   }
-  cartLogic(){
-    
+  cartLogic() {
+    // clear cart button
+    clearCartBtn.addEventListener("click", () => {
+      this.clearCart();
+    });
+
+    // cart functionality
+    cartContent.addEventListener("click", (event) => {
+      console.log(event.target);
+    });
+  }
+  clearCart() {
+    // loop on all the item and tigger remove for each one
+    cart.forEach((item) => this.removeItem(item.id));
+    console.log(cartContent.children[0]);
+    while (cartContent.children.length) {
+      cartContent.removeChild(cartContent.children[0]);
+    }
+    closeModalFunction();
+  }
+
+  removeItem(id) {
+    // resuable method for signle remove and clear all
+    cart = cart.filter((cartItem) => cartItem.id !== id);
+    this.setCartValue(cart);
+    Storage.saveCart(cart);
+    const button = this.getSingleButton(id);
+    button.disabled = false;
+    button.innerHTML = `<i class="fas fa-shopping-cart"></i>
+   add to cart`;
+  }
+  getSingleButton(id) {
+    // should be parseInt to get correct result
+    return buttonsDOM.find((btn) => parseInt(btn.dataset.id) === id);
   }
 }
 
@@ -135,7 +174,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const productsData = products.getProducts();
   ui.displayProducts(productsData);
   ui.getCartBtns();
-  ui.cartLogic()
+  ui.cartLogic();
   Storage.saveProducts(productsData);
 });
 

@@ -221,7 +221,9 @@ body {
   cursor: pointer;
   font-weight: bold;
 }
-
+.remove-item {
+  cursor: pointer;
+}
 .cart-footer {
   text-align: center;
 }
@@ -229,4 +231,10 @@ body {
 .cart-footer span {
   display: inline-block;
   margin-right: 1rem;
+}
+
+.clear-cart {
+  background-color: var(--mainWhite);
+  border: 1px solid var(--primaryColor);
+  margin-right: 10px;
 }
