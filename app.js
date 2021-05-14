@@ -91,7 +91,7 @@ class UI {
  </div>
  <div class="cart-item-conteoller">
    <i class="fas fa-chevron-up" data-id=${cart.id}></i>
-   <p>${cart.quantity}</p>
+   <p class="item-quantity">${cart.quantity}</p>
    <i class="fas fa-chevron-down" data-id=${cart.id}></i>
  </div>
  <i class="fas fa-trash remove-item" data-id=${cart.id}></i>
@@ -116,13 +116,55 @@ class UI {
 
     // cart functionality
     cartContent.addEventListener("click", (event) => {
-      console.log(event.target);
+      if (event.target.classList.contains("remove-item")) {
+        const removeItem = event.target;
+        const id = removeItem.dataset.id;
+        console.log(id);
+        // remove from DOM :
+        // console.log(removeItem.parentElement);
+        cartContent.removeChild(removeItem.parentElement);
+
+        // remove item from cart not DOM !
+        this.removeItem(id);
+      } else if (event.target.classList.contains("fa-chevron-up")) {
+        const addQuantity = event.target;
+        const id = addQuantity.dataset.id;
+        const addedItem = cart.find((c) => c.id == id);
+        addedItem.quantity++;
+        // update storage
+        Storage.saveCart(cart);
+        // update total price
+        this.setCartValue(cart);
+        // update item quantity :
+        // console.log(addQuantity.nextElementSibling);
+        addQuantity.nextElementSibling.innerText = addedItem.quantity;
+      } else if (event.target.classList.contains("fa-chevron-down")) {
+        const subQuantity = event.target;
+        const id = subQuantity.dataset.id;
+        const substractedItem = cart.find((c) => c.id == id);
+
+        if (substractedItem.quantity === 1) {
+          this.removeItem(id);
+          cartContent.removeChild(subQuantity.parentElement.parentElement);
+          return;
+        }
+
+        substractedItem.quantity--;
+        // update storage
+        Storage.saveCart(cart);
+        // update total price
+        this.setCartValue(cart);
+        // update item quantity :
+        // console.log(subQuantity.nextElementSibling);
+        subQuantity.previousElementSibling.innerText = substractedItem.quantity;
+      }
     });
   }
+
   clearCart() {
     // loop on all the item and tigger remove for each one
     cart.forEach((item) => this.removeItem(item.id));
-    console.log(cartContent.children[0]);
+    // console.log(cartContent.children[0]);
     while (cartContent.children.length) {
       cartContent.removeChild(cartContent.children[0]);
     }
@@ -131,7 +173,7 @@ class UI {
 
   removeItem(id) {
     // resuable method for signle remove and clear all
-    cart = cart.filter((cartItem) => cartItem.id !== id);
+    cart = cart.filter((cartItem) => cartItem.id != id);
     this.setCartValue(cart);
     Storage.saveCart(cart);
     const button = this.getSingleButton(id);
@@ -141,7 +183,7 @@ class UI {
   }
   getSingleButton(id) {
     // should be parseInt to get correct result
-    return buttonsDOM.find((btn) => parseInt(btn.dataset.id) === id);
+    return buttonsDOM.find((btn) => parseInt(btn.dataset.id) === parseInt(id));
   }
 }
 
