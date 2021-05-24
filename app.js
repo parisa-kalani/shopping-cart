@@ -1,4 +1,5 @@
 import { productsData } from "./products.js";
+
 const cartBtn = document.querySelector(".cart-btn");
 const cartModal = document.querySelector(".cart");
 const backDrop = document.querySelector(".backdrop");
@@ -34,7 +35,6 @@ class UI {
         <p class="product-title">$ ${product.title}</p>
       </div>
       <button class="btn add-to-cart" data-id=${product.id}>
-        <i class="fas fa-shopping-cart"></i>
         add to cart
       </button>
     </div>`;
@@ -65,7 +65,6 @@ class UI {
         this.setCartValue(cart);
         // 5. dispaly cart item
         this.addCartItem(addedProduct);
-        // 6. show the cart
       });
     });
   }
@@ -178,8 +177,7 @@ class UI {
     Storage.saveCart(cart);
     const button = this.getSingleButton(id);
     button.disabled = false;
-    button.innerHTML = `<i class="fas fa-shopping-cart"></i>
-   add to cart`;
+    button.innerHTML = `add to cart`;
   }
   getSingleButton(id) {
     // should be parseInt to get correct result
@@ -208,7 +206,7 @@ class Storage {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  const ui = new UI(0);
+  const ui = new UI();
   // set up already added cart items
   ui.setupApp();
   const products = new Products();
