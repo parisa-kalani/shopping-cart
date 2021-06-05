@@ -244,9 +244,9 @@ body {
 
 @media (max-width: 600px) {
   .cart {
-    left: 10% !important;
-    max-width:30rem;
-    width: calc(100vw - 7rem);
+    left: 6% !important;
+    max-width:45rem;
+    width: calc(100vw - 3rem);
     padding: 0;
   }
 }
