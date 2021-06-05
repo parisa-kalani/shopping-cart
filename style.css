@@ -24,9 +24,6 @@ body {
   background-color: var(--bodyColor);
   /* position: relative; */
 }
-.main-container {
-  /* position: relative; */
-}
 
 /* --------------- Navbar ---------------- */
 .navbar {
@@ -244,9 +241,9 @@ body {
 
 @media (max-width: 600px) {
   .cart {
-    left: 6% !important;
-    max-width:45rem;
-    width: calc(100vw - 3rem);
+    left: 5% !important;
+    max-width: 50rem;
+    width: calc(100vw - 2rem);
     padding: 0;
   }
 }
